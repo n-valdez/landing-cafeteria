@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/src/lib/supabase';
+import QrCafeteria from '@/src/components/QrCafeteria';
 import {
   Lock,
   Plus,
@@ -431,7 +432,7 @@ export default function AdminPage() {
                   : 'bg-white/10 hover:bg-white/20'
               }`}
             >
-              <Settings className="w-4 h-4" /> Config
+              <Settings className="w-4 h-4" /> Config y QR
             </button>
             <a href="/" className="ml-2 text-xs underline text-[#F5CBB0]">
               Ver Web
@@ -631,7 +632,6 @@ export default function AdminPage() {
                 </h2>
               </div>
 
-              {/* Barra de filtros del Admin */}
               <div className="bg-white p-4 rounded-2xl border border-[#EADCD0] grid sm:grid-cols-3 gap-3">
                 <div className="relative">
                   <Search className="w-4 h-4 text-[#9C6644] absolute left-3 top-1/2 -translate-y-1/2" />
@@ -672,7 +672,6 @@ export default function AdminPage() {
                 </select>
               </div>
 
-              {/* Lista filtrada */}
               <div className="space-y-3">
                 {productosAdminFiltrados.map((p) => (
                   <div
@@ -751,7 +750,6 @@ export default function AdminPage() {
         {/* PESTAÑA 2: CONTROL DE PEDIDOS CON BUSCADOR Y FILTROS */}
         {tab === 'pedidos' && (
           <div className="space-y-6">
-            {/* Barra de filtro de pedidos */}
             <div className="bg-white p-4 rounded-2xl border border-[#EADCD0] flex flex-col sm:flex-row gap-3 justify-between">
               <div className="relative flex-1">
                 <Search className="w-4 h-4 text-[#9C6644] absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -784,7 +782,6 @@ export default function AdminPage() {
             </div>
 
             <div className="grid lg:grid-cols-2 gap-8">
-              {/* Pedidos de carrito WhatsApp */}
               <div className="space-y-4">
                 <h2 className="font-serif text-2xl font-bold">
                   Pedidos vía WhatsApp ({pedidosWaFiltrados.length})
@@ -855,7 +852,6 @@ export default function AdminPage() {
                 ))}
               </div>
 
-              {/* Encargos Especiales */}
               <div className="space-y-4">
                 <h2 className="font-serif text-2xl font-bold">
                   Solicitudes de Tortas / Mesa Dulce ({pedidosEspFiltrados.length})
@@ -894,55 +890,59 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* PESTAÑA 3: CONFIGURACIÓN */}
+        {/* PESTAÑA 3: CONFIGURACIÓN Y CÓDIGO QR */}
         {tab === 'config' && (
-          <form
-            onSubmit={guardarConfiguracion}
-            className="max-w-md bg-white p-8 rounded-3xl border border-[#EADCD0] space-y-5"
-          >
-            <h2 className="font-serif text-2xl font-bold">
-              Configuración de la Tienda
-            </h2>
-
-            <div>
-              <label className="text-xs font-bold uppercase text-[#6F4E37] block mb-1">
-                Número de WhatsApp (con código de país, sin +)
-              </label>
-              <input
-                required
-                value={whatsappNum}
-                onChange={(e) => setWhatsappNum(e.target.value)}
-                placeholder="595994717184"
-                className="w-full px-4 py-2.5 rounded-xl bg-[#FAF6F2] border border-[#EADCD0] text-sm"
-              />
-            </div>
-
-            <div>
-              <label className="text-xs font-bold uppercase text-[#6F4E37] block mb-1">
-                Cambiar PIN del Panel Admin (opcional)
-              </label>
-              <input
-                type="password"
-                value={nuevoPin}
-                onChange={(e) => setNuevoPin(e.target.value)}
-                placeholder="Dejar vacío para mantener el actual"
-                className="w-full px-4 py-2.5 rounded-xl bg-[#FAF6F2] border border-[#EADCD0] text-sm"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="w-full py-3 rounded-full bg-[#3B1F14] text-[#FAF6F2] text-sm font-bold hover:bg-[#5A3222] transition"
+          <div className="grid lg:grid-cols-2 gap-8 items-start">
+            <form
+              onSubmit={guardarConfiguracion}
+              className="bg-white p-8 rounded-3xl border border-[#EADCD0] space-y-5"
             >
-              Guardar Configuración
-            </button>
+              <h2 className="font-serif text-2xl font-bold">
+                Configuración de la Tienda
+              </h2>
 
-            {msgConfig && (
-              <p className="text-xs text-center font-bold text-emerald-700">
-                {msgConfig}
-              </p>
-            )}
-          </form>
+              <div>
+                <label className="text-xs font-bold uppercase text-[#6F4E37] block mb-1">
+                  Número de WhatsApp (con código de país, sin +)
+                </label>
+                <input
+                  required
+                  value={whatsappNum}
+                  onChange={(e) => setWhatsappNum(e.target.value)}
+                  placeholder="595994717184"
+                  className="w-full px-4 py-2.5 rounded-xl bg-[#FAF6F2] border border-[#EADCD0] text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold uppercase text-[#6F4E37] block mb-1">
+                  Cambiar PIN del Panel Admin (opcional)
+                </label>
+                <input
+                  type="password"
+                  value={nuevoPin}
+                  onChange={(e) => setNuevoPin(e.target.value)}
+                  placeholder="Dejar vacío para mantener el actual"
+                  className="w-full px-4 py-2.5 rounded-xl bg-[#FAF6F2] border border-[#EADCD0] text-sm"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-3 rounded-full bg-[#3B1F14] text-[#FAF6F2] text-sm font-bold hover:bg-[#5A3222] transition"
+              >
+                Guardar Configuración
+              </button>
+
+              {msgConfig && (
+                <p className="text-xs text-center font-bold text-emerald-700">
+                  {msgConfig}
+                </p>
+              )}
+            </form>
+
+            <QrCafeteria />
+          </div>
         )}
       </main>
     </div>
